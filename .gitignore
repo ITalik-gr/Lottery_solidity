@@ -3,3 +3,4 @@ artifacts
 cache
 *.lock
 *.env
+gas-report.txt
