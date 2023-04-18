@@ -80,4 +80,19 @@ const { assert, expect } = require("chai");
       assert(upkeepNeeded)
   })
   })
+
+  describe("performUpkeep", function() {
+    it("it can only run if checkupkeep is true", async function() {
+      await raffle.enterRaffle({value: raffleEntranceFee});
+      await network.provider.send("evm_increaseTime", [interval.toNumber() + 1]); // скіп часу
+      await network.provider.send("evm_mine", []); // скіп блоків
+
+      const tx = await raffle.performUpkeep([]);
+      assert(tx);
+    })
+
+    it("reverts when checkupkeep is false", async function() {
+      await expect(raffle.performUpkeep([])).to.be.revertedWith("Raffle__UpkeepNotNeeded");
+    })
+  })
 })
